@@ -21,6 +21,24 @@ export enum ZegoPublisherState {
     Publishing = 2,
 }
 
+export enum ZegoViewMode {
+    AspectFit = 0,
+    AspectFill = 1,
+    ScaleToFill = 2,
+}
+
+export enum ZegoPlayerState {
+    NoPlay = 0,
+    PlayRequesting = 1,
+    Playing = 2,
+}
+
+export enum ZegoPlayerVideoLayer {
+    Auto = 0,
+    Base = 1,
+    Extend = 2,
+}
+
 export class ZegoUser {
     userID: string
     userName: string
@@ -43,3 +61,34 @@ export class ZegoRoomConfig {
     }
 }
 
+export class ZegoView {
+    reactTag: number
+    viewMode: ZegoViewMode
+    backgroundColor: number
+
+    constructor(reactTag: number, viewMode: ZegoViewMode, backgroundColor: number) {
+        this.reactTag = reactTag;
+        this.viewMode = viewMode;
+        this.backgroundColor = backgroundColor;
+    }
+}
+
+export class ZegoCDNConfig {
+    url: string
+    authParam: string
+
+    constructor(url: string, authParam: string) {
+        this.url = url;
+        this.authParam = authParam;
+    }
+}
+
+export class ZegoPlayerConfig {
+    cdnConfig: ZegoCDNConfig
+    videoLayer: ZegoPlayerVideoLayer
+
+    constructor(cdnConfig: ZegoCDNConfig, videoLayer: ZegoPlayerVideoLayer) {
+        this.cdnConfig = cdnConfig;
+        this.videoLayer = videoLayer;
+    }
+}

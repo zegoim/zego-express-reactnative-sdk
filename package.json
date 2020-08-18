@@ -3,12 +3,11 @@
   "title": "React Native Zego Express Engine",
   "version": "0.7.0",
   "description": "TODO",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "index.ts",
   "files": [
     "README.md",
     "android",
-    "index.js",
+    "index.ts",
     "ios",
     "react-native-zego-express-engine.podspec"
   ],
