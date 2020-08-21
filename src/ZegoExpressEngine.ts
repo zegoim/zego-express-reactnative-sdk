@@ -99,27 +99,27 @@ export default class ZegoExpressEngine {
         return ZegoExpressNativeModule.logoutRoom(roomID);
     }
 
-    startPublishingStream(streamID: string, channel = ZegoPublishChannel.Main) {
+    startPublishingStream(streamID: string, channel = ZegoPublishChannel.Main): Promise<void> {
         return ZegoExpressNativeModule.startPublishingStream(streamID, channel);
     }
 
-    stopPublishingStream(channel = ZegoPublishChannel.Main) {
+    stopPublishingStream(channel = ZegoPublishChannel.Main): Promise<void> {
         return ZegoExpressNativeModule.stopPublishingStream(channel);
     }
 
-    startPreview(view: ZegoView, channel = ZegoPublishChannel.Main) {
+    startPreview(view: ZegoView, channel = ZegoPublishChannel.Main): Promise<void> {
         return ZegoExpressNativeModule.startPreview(view, channel);
     }
 
-    stopPreview(channel = ZegoPublishChannel.Main) {
+    stopPreview(channel = ZegoPublishChannel.Main): Promise<void> {
         return ZegoExpressNativeModule.stopPreview(channel);
     }
 
-    startPlayingStream(streamID: string, view: ZegoView, config?: ZegoPlayerConfig) {
+    startPlayingStream(streamID: string, view: ZegoView, config?: ZegoPlayerConfig): Promise<void> {
         return ZegoExpressNativeModule.startPlayingStream(streamID, view)
     }
 
-    stopPlayingStream(streamID: string) {
+    stopPlayingStream(streamID: string): Promise<void> {
         return ZegoExpressNativeModule.stopPlayingStream(streamID);
     }
 

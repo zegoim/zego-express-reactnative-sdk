@@ -13,15 +13,6 @@
 
 RCT_EXPORT_MODULE()
 
-- (NSArray<NSString *> *)supportedEvents
-{
-  return @[
-      @"RoomStateUpdate", 
-      @"PublisherStateUpdate", 
-      @"PlayerStateUpdate"
-      ];
-}
-
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
@@ -55,11 +46,11 @@ RCT_EXPORT_METHOD(getVersion:(RCTPromiseResolveBlock)resolve
     resolve([ZegoExpressEngine getVersion]);
 }
 
-RCT_EXPORT_METHOD(createEngine:(NSUInteger)appID 
-                  appSign:(NSString *)appSign 
-                  isTestEnv:(BOOL)isTestEnv 
-                  scenario:(NSInteger)scenario 
-                  resolver:(RCTPromiseResolveBlock)resolve 
+RCT_EXPORT_METHOD(createEngine:(NSUInteger)appID
+                  appSign:(NSString *)appSign
+                  isTestEnv:(BOOL)isTestEnv
+                  scenario:(NSInteger)scenario
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSLog(@"app id: %lu, app sign: %@, test: %d, scenario: %ld", (unsigned long)appID, appSign, isTestEnv, (long)scenario);
@@ -170,6 +161,107 @@ RCT_EXPORT_METHOD(stopPreview:(NSInteger)channel
     resolve(nil);
 }
 
+RCT_EXPORT_METHOD(setVideoConfig:(id)config
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    if([config isKindOfClass:[NSDictionary class]]) {
+        
+        ZegoVideoConfig * configObj = [[ZegoVideoConfig alloc] init];
+        configObj.captureResolution = CGSizeMake([RCTConvert int:config[@"captureWidth"]], [RCTConvert int:config[@"captureHeight"]]);
+        configObj.encodeResolution = CGSizeMake([RCTConvert int:config[@"encodeWidth"]], [RCTConvert int:config[@"encodeHeight"]]);
+        configObj.bitrate = [RCTConvert int:config[@"bitrate"]];
+        configObj.fps = [RCTConvert int:config[@"fps"]];
+        configObj.codecID = (ZegoVideoCodecID)[RCTConvert int:config[@"codecID"]];
+        
+        [[ZegoExpressEngine sharedEngine] setVideoConfig:configObj channel:(ZegoPublishChannel)channel];
+        
+    } else if([config isKindOfClass:[NSNumber class]]) {
+        
+        int preset = [(NSNumber *)config intValue];
+        if(preset < 0 || preset > 5)
+        {
+            reject(@"-1", @"invalid params", nil);
+            return;
+        }
+        
+        ZegoVideoConfig *configObj = [[ZegoVideoConfig alloc] initWithPreset:(ZegoVideoConfigPreset)preset];
+        [[ZegoExpressEngine sharedEngine] setVideoConfig:configObj channel:(ZegoPublishChannel)channel];
+        
+    } else {
+        reject(@"-1", @"invalid params", nil);
+        return;
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(getVideoConfig:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setVideoMirrorMode:(NSInteger)mode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setAppOrientation:(NSInteger)oroentation
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setAudioConfig:(NSDictionary *)config
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(getAudioConfig:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(mutePublishStreamAudio:(BOOL)mute
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(mutePublishStreamVideo:(BOOL)mute
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setCaptureVolume:(NSInteger)volume
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableHardwareEncoder:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
 RCT_EXPORT_METHOD(startPlayingStream:(NSString *)streamID
                   view:(NSDictionary *)view
                   config:(NSDictionary *)config
@@ -211,8 +303,167 @@ RCT_EXPORT_METHOD(stopPlayingStream:(NSString *)streamID
     resolve(nil);
 }
 
+RCT_EXPORT_METHOD(setPlayVolume:(NSInteger)volume
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(mutePlayStreamAudio:(BOOL)mute
+                  streamID:(NSString *)streamID
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(mutePlayStreamVideo:(BOOL)mute
+                  streamID:(NSString *)streamID
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableHardwareDecoder:(BOOL)mute
+                  streamID:(NSString *)streamID
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(muteMicrophone:(BOOL)mute
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(isMicrophoneMuted:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(muteSpeaker:(BOOL)mute
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(isSpeakerMuted:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableAudioCaptureDevice:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableCamera:(BOOL)enable
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(useFrontCamera:(BOOL)enable
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(startSoundLevelMonitor:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(stopSoundLevelMonitor:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableAEC:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableHeadphoneAEC:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setAECMode:(NSInteger)mode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableAGC:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableANS:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setANSMode:(NSInteger)mode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(enableBeautify:(NSInteger)feature
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
+                  channel:(NSInteger)channel
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+}
+
+
+
 # pragma mark ZegoEventHandler
 
+# pragma mark engine
+- (void)onDebugError:(int)errorCode funcName:(NSString *)funcName info:(NSString *)info
+{
+    
+}
+
+# pragma mark room
 - (void)onRoomStateUpdate:(ZegoRoomState)state errorCode:(int)errorCode extendedData:(nullable NSDictionary *)extendedData roomID:(NSString *)roomID
 {
     NSLog(@"RN Callback: [onRoomStateUpdate] state: %lu, error: %d", (unsigned long)state, errorCode);
@@ -232,6 +483,22 @@ RCT_EXPORT_METHOD(stopPlayingStream:(NSString *)streamID
     }
 }
 
+- (void)onRoomUserUpdate:(ZegoUpdateType)updateType userList:(NSArray<ZegoUser *> *)userList roomID:(NSString *)roomID
+{
+    
+}
+
+- (void)onRoomOnlineUserCountUpdate:(int)count roomID:(NSString *)roomID
+{
+    
+}
+
+- (void)onRoomStreamUpdate:(ZegoUpdateType)updateType streamList:(NSArray<ZegoStream *> *)streamList roomID:(NSString *)roomID
+{
+    
+}
+
+# pragma mark publisher
 - (void)onPublisherStateUpdate:(ZegoPublisherState)state errorCode:(int)errorCode extendedData:(nullable NSDictionary *)extendedData streamID:(NSString *)streamID
 {
     NSLog(@"RN Callback: [onPublisherStateUpdate] state: %lu, error: %d", (unsigned long)state, errorCode);
@@ -251,6 +518,27 @@ RCT_EXPORT_METHOD(stopPlayingStream:(NSString *)streamID
     }
 }
 
+- (void)onPublisherQualityUpdate:(ZegoPublishStreamQuality *)quality streamID:(NSString *)streamID
+{
+    
+}
+
+- (void)onPublisherCapturedAudioFirstFrame
+{
+    
+}
+
+- (void)onPublisherCapturedVideoFirstFrame:(ZegoPublishChannel)channel
+{
+    
+}
+
+- (void)onPublisherVideoSizeChanged:(CGSize)size channel:(ZegoPublishChannel)channel
+{
+    
+}
+
+# pragma mark player
 - (void)onPlayerStateUpdate:(ZegoPlayerState)state errorCode:(int)errorCode extendedData:(nullable NSDictionary *)extendedData streamID:(NSString *)streamID
 {
     NSLog(@"RN Callback: [onPlayerStateUpdate] state: %lu, error: %d", state, errorCode);
@@ -270,6 +558,89 @@ RCT_EXPORT_METHOD(stopPlayingStream:(NSString *)streamID
     }
 }
 
+- (void)onPlayerQualityUpdate:(ZegoPlayStreamQuality *)quality streamID:(NSString *)streamID
+{
+    
+}
+
+- (void)onPlayerMediaEvent:(ZegoPlayerMediaEvent)event streamID:(NSString *)streamID
+{
+    
+}
+
+- (void)onPlayerRecvAudioFirstFrame:(NSString *)streamID
+{
+    
+}
+
+- (void)onPlayerRecvVideoFirstFrame:(NSString *)streamID
+{
+    
+}
+
+- (void)onPlayerRenderVideoFirstFrame:(NSString *)streamID
+{
+    
+}
+
+- (void)onPlayerVideoSizeChanged:(CGSize)size streamID:(NSString *)streamID
+{
+    
+}
+
+# pragma mark device
+- (void)onCapturedSoundLevelUpdate:(NSNumber *)soundLevel
+{
+    
+}
+
+- (void)onRemoteSoundLevelUpdate:(NSDictionary<NSString *, NSNumber *> *)soundLevels
+{
+    
+}
+
+- (void)onDeviceError:(int)errorCode deviceName:(NSString *)deviceName
+{
+    
+}
+
+- (void)onRemoteCameraStateUpdate:(ZegoRemoteDeviceState)state streamID:(NSString *)streamID
+{
+    
+}
+
+- (void)onRemoteMicStateUpdate:(ZegoRemoteDeviceState)state streamID:(NSString *)streamID
+{
+    
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+  return @[
+      @"DebugError",
+      @"RoomStateUpdate",
+      @"RoomUserUpdate",
+      @"RoomOnlineUserCountUpdate",
+      @"RoomStreamUpdate",
+      @"PublisherStateUpdate",
+      @"PublisherQualityUpdate",
+      @"PublisherCapturedAudioFirstFrame",
+      @"PublisherCapturedVideoFirstFrame",
+      @"PublisherVideoSizeChanged",
+      @"PlayerStateUpdate",
+      @"PlayerQualityUpdate",
+      @"PlayerMediaEvent",
+      @"PlayerRecvAudioFirstFrame",
+      @"PlayerRecvVideoFirstFrame",
+      @"PlayerRenderVideoFirstFrame",
+      @"PlayerVideoSizeChanged",
+      @"CapturedSoundLevelUpdate",
+      @"RemoteSoundLevelUpdate",
+      @"DeviceError",
+      @"RemoteCameraStateUpdate",
+      @"RemoteMicStateUpdate"
+      ];
+}
 
 
 @end
