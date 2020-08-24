@@ -3,10 +3,12 @@
 #import <React/RCTConvert.h>
 #import "ZegoLog.h"
 
-@interface RCTZegoExpressNativeModule()<ZegoEventHandler>
+@interface RCTZegoExpressNativeModule()<ZegoEventHandler, ZegoMediaPlayerEventHandler>
 
 @property (nonatomic, assign) BOOL isInited;
 @property (nonatomic, assign) BOOL hasListeners;
+
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, ZegoMediaPlayer *> *mediaPlayerMap;
 
 @end
 
@@ -145,11 +147,11 @@ RCT_EXPORT_METHOD(logoutRoom:(NSString *)roomID
 }
 
 RCT_EXPORT_METHOD(startPublishingStream:(NSString *)streamID
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"startPublishingStream: stream id: %@ channel: %ld", streamID, channel);
+    ZGLog(@"startPublishingStream: stream id: %@ channel: %d", streamID, channel);
     
     [[ZegoExpressEngine sharedEngine] startPublishingStream:streamID channel:(ZegoPublishChannel)channel];
 
@@ -186,11 +188,11 @@ RCT_EXPORT_METHOD(startPreview:(NSDictionary *)view
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(stopPreview:(NSInteger)channel
+RCT_EXPORT_METHOD(stopPreview:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"stopPreview: channel: %ld", channel);
+    ZGLog(@"stopPreview: channel: %d", channel);
     
     [[ZegoExpressEngine sharedEngine] stopPreview:(ZegoPublishChannel)channel];
     
@@ -198,11 +200,11 @@ RCT_EXPORT_METHOD(stopPreview:(NSInteger)channel
 }
 
 RCT_EXPORT_METHOD(setVideoConfig:(NSDictionary *)config
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setVideoConfig: config: %@, channel: %ld", config, channel);
+    ZGLog(@"setVideoConfig: config: %@, channel: %d", config, channel);
     
     ZegoVideoConfig * configObj = [[ZegoVideoConfig alloc] init];
     configObj.captureResolution = CGSizeMake([RCTConvert int:config[@"captureWidth"]], [RCTConvert int:config[@"captureHeight"]]);
@@ -216,7 +218,7 @@ RCT_EXPORT_METHOD(setVideoConfig:(NSDictionary *)config
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(getVideoConfig:(NSInteger)channel
+RCT_EXPORT_METHOD(getVideoConfig:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -232,24 +234,24 @@ RCT_EXPORT_METHOD(getVideoConfig:(NSInteger)channel
             });
 }
 
-RCT_EXPORT_METHOD(setVideoMirrorMode:(NSInteger)mode
-                  channel:(NSInteger)channel
+RCT_EXPORT_METHOD(setVideoMirrorMode:(int)mode
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setVideoMirrorMode: mode: %ld, channel: %ld", mode, channel);
+    ZGLog(@"setVideoMirrorMode: mode: %d, channel: %d", mode, channel);
     
     [[ZegoExpressEngine sharedEngine] setVideoMirrorMode:(ZegoVideoMirrorMode)mode channel:(ZegoPublishChannel)channel];
     
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(setAppOrientation:(NSInteger)orientation
-                  channel:(NSInteger)channel
+RCT_EXPORT_METHOD(setAppOrientation:(int)orientation
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setAppOrientation: ori: %ld, channel: %ld", orientation, channel);
+    ZGLog(@"setAppOrientation: ori: %d, channel: %d", orientation, channel);
     
     UIInterfaceOrientation  uiOrientation = UIInterfaceOrientationUnknown;
     switch (orientation) {
@@ -300,11 +302,11 @@ RCT_EXPORT_METHOD(getAudioConfig:(RCTPromiseResolveBlock)resolve
 }
 
 RCT_EXPORT_METHOD(mutePublishStreamAudio:(BOOL)mute
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"mutePublishStreamAudio: mute: %d, channel: %ld", mute, channel);
+    ZGLog(@"mutePublishStreamAudio: mute: %d, channel: %d", mute, channel);
     
     [[ZegoExpressEngine sharedEngine] mutePublishStreamAudio:mute channel:(ZegoPublishChannel)channel];
     
@@ -312,22 +314,22 @@ RCT_EXPORT_METHOD(mutePublishStreamAudio:(BOOL)mute
 }
 
 RCT_EXPORT_METHOD(mutePublishStreamVideo:(BOOL)mute
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"mutePublishStreamVideo: mute: %d, channel: %ld", mute, channel);
+    ZGLog(@"mutePublishStreamVideo: mute: %d, channel: %d", mute, channel);
     
     [[ZegoExpressEngine sharedEngine] mutePublishStreamVideo:mute channel:(ZegoPublishChannel)channel];
     
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(setCaptureVolume:(NSInteger)volume
+RCT_EXPORT_METHOD(setCaptureVolume:(int)volume
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setCaptureVolume: volume: %ld", volume);
+    ZGLog(@"setCaptureVolume: volume: %d", volume);
     
     [[ZegoExpressEngine sharedEngine] setCaptureVolume:(int)volume];
     
@@ -391,11 +393,11 @@ RCT_EXPORT_METHOD(stopPlayingStream:(NSString *)streamID
 }
 
 RCT_EXPORT_METHOD(setPlayVolume:(NSString *)streamID
-                  volume:(NSInteger)volume
+                  volume:(int)volume
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setPlayVolume: volume: %ld, streamID: %@", volume, streamID);
+    ZGLog(@"setPlayVolume: volume: %d, streamID: %@", volume, streamID);
     
     [[ZegoExpressEngine sharedEngine] setPlayVolume:(int)volume streamID:streamID];
     
@@ -495,11 +497,11 @@ RCT_EXPORT_METHOD(enableCamera:(BOOL)enable
 }
 
 RCT_EXPORT_METHOD(useFrontCamera:(BOOL)enable
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"useFrontCamera: enable: %d, channel: %ld", enable, channel);
+    ZGLog(@"useFrontCamera: enable: %d, channel: %d", enable, channel);
     
     [[ZegoExpressEngine sharedEngine] useFrontCamera:enable];
     
@@ -544,11 +546,11 @@ RCT_EXPORT_METHOD(enableHeadphoneAEC:(BOOL)enable
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(setAECMode:(NSInteger)mode
+RCT_EXPORT_METHOD(setAECMode:(int)mode
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setAECMode: mode: %ld", mode);
+    ZGLog(@"setAECMode: mode: %d", mode);
     
     [[ZegoExpressEngine sharedEngine] setAECMode:(ZegoAECMode)mode];
     
@@ -577,23 +579,23 @@ RCT_EXPORT_METHOD(enableANS:(BOOL)enable
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(setANSMode:(NSInteger)mode
+RCT_EXPORT_METHOD(setANSMode:(int)mode
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setANSMode: mode: %ld", mode);
+    ZGLog(@"setANSMode: mode: %d", mode);
     
     [[ZegoExpressEngine sharedEngine] setANSMode:(ZegoANSMode)mode];
     
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(enableBeautify:(NSInteger)feature
-                  channel:(NSInteger)channel
+RCT_EXPORT_METHOD(enableBeautify:(int)feature
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"enableBeautify: feature: %ld, channel: %ld", feature, channel);
+    ZGLog(@"enableBeautify: feature: %d, channel: %d", feature, channel);
     
     [[ZegoExpressEngine sharedEngine] enableBeautify:(ZegoBeautifyFeature)feature channel:(ZegoPublishChannel)channel];
     
@@ -601,11 +603,11 @@ RCT_EXPORT_METHOD(enableBeautify:(NSInteger)feature
 }
 
 RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
-                  channel:(NSInteger)channel
+                  channel:(int)channel
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    ZGLog(@"setBeautifyOption: option: %@, channel: %ld", option, channel);
+    ZGLog(@"setBeautifyOption: option: %@, channel: %d", option, channel);
     
     ZegoBeautifyOption *optionObj = [[ZegoBeautifyOption alloc] init];
     optionObj.polishStep = [RCTConvert double:option[@"polishStep"]];
@@ -617,6 +619,279 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
     resolve(nil);
 }
 
+RCT_EXPORT_METHOD(createMediaPlayer:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"createMediaPlayer");
+    if(!self.mediaPlayerMap) {
+        self.mediaPlayerMap = [NSMutableDictionary dictionary];
+    }
+    
+    ZegoMediaPlayer *mediaPlayer = [[ZegoExpressEngine sharedEngine] createMediaPlayer];
+    if(mediaPlayer) {
+        NSNumber *index = mediaPlayer.index;
+
+        [mediaPlayer setEventHandler:self];
+        self.mediaPlayerMap[index] = mediaPlayer;
+        
+        resolve(index);
+    } else {
+        resolve(@(-1));
+    }
+}
+
+RCT_EXPORT_METHOD(destroyMediaPlayer:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"destroyMediaPlayer, index: %@", index);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+
+    if (mediaPlayer) {
+        [[ZegoExpressEngine sharedEngine] destroyMediaPlayer:mediaPlayer];
+    }
+
+    [self.mediaPlayerMap removeObjectForKey:index];
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerSetPlayerCanvas:(nonnull NSNumber *)index
+                  view:(NSDictionary *)view
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerSetPlayerCanvas, index: %@, view: %@", index, view);
+    
+    NSNumber *viewTag = [RCTConvert NSNumber:view[@"reactTag"]];
+    UIView *uiView = [self.bridge.uiManager viewForReactTag:viewTag];
+    
+    ZegoCanvas *canvas = [[ZegoCanvas alloc] initWithView:uiView];
+    canvas.viewMode = (ZegoViewMode)[RCTConvert int:view[@"viewMode"]];
+    canvas.backgroundColor = [RCTConvert int:view[@"backgroundColor"]];
+    
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if (mediaPlayer) {
+        [mediaPlayer setPlayerCanvas:canvas];
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerLoadResource:(nonnull NSNumber *)index
+                  path:(NSString *)path
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerLoadResource, index: %@, view: %@", index, path);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if (mediaPlayer) {
+        [mediaPlayer loadResource:path callback:^(int errorCode) {
+            resolve(@(errorCode));
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(mediaPlayerStart:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerStart, index: %@", index);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer start];
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerStop:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerStop, index: %@", index);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer stop];
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerPause:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerPause, index: %@", index);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer pause];
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerResume:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerResume, index: %@", index);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer resume];
+    }
+    
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerSeekTo:(nonnull NSNumber *)index
+                  millisecond:(unsigned long long)millisecond
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerSeekTo, index: %@, sec: %llu", index, millisecond);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+
+    if (mediaPlayer) {
+
+        [mediaPlayer seekTo:millisecond callback:^(int errorCode) {
+            resolve(@(errorCode));
+        }];
+    }
+}
+
+RCT_EXPORT_METHOD(mediaPlayerEnableRepeat:(nonnull NSNumber *)index
+                  enable:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerEnableRepeat, index: %@, enable: %d", index, enable);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer enableRepeat:enable];
+    }
+
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerEnableAux:(nonnull NSNumber *)index
+                  enable:(BOOL)enable
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerEnableAux, index: %@, enable: %d", index, enable);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer enableAux:enable];
+    }
+
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerMuteLocal:(nonnull NSNumber *)index
+                  mute:(BOOL)mute
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerMuteLocal, index: %@, mute: %d", index, mute);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer muteLocal:mute];
+    }
+
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerSetVolume:(nonnull NSNumber *)index
+                  volume:(int)volume
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerSetVolume, index: %@, volume: %d", index, volume);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer setVolume:volume];
+    }
+
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerSetProgressInterval:(nonnull NSNumber *)index
+                  millisecond:(unsigned long long)millisecond
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZGLog(@"mediaPlayerSetProgressInterval, index: %@, millisecond: %llu", index, millisecond);
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        [mediaPlayer setProgressInterval:millisecond];
+    }
+
+    resolve(nil);
+}
+
+RCT_EXPORT_METHOD(mediaPlayerGetVolume:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        resolve(@(mediaPlayer.volume));
+    } else {
+        resolve(@(0));
+    }
+}
+
+RCT_EXPORT_METHOD(mediaPlayerGetTotalDuration:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        resolve(@(mediaPlayer.totalDuration));
+    } else {
+        resolve(@(0));
+    }
+}
+
+RCT_EXPORT_METHOD(mediaPlayerGetCurrentProgress:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        resolve(@(mediaPlayer.currentProgress));
+    } else {
+        resolve(@(0));
+    }
+}
+
+RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(mediaPlayer) {
+        resolve(@(mediaPlayer.currentState));
+    } else {
+        resolve(@(0));
+    }
+}
 
 
 # pragma mark ZegoEventHandler
@@ -734,7 +1009,6 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
 
 - (void)onPublisherQualityUpdate:(ZegoPublishStreamQuality *)quality streamID:(NSString *)streamID
 {
-    ZGLog(@"[onPublisherQualityUpdate] quality: %@, stream id: %@", quality, streamID);
     if(self.hasListeners) {
         [self sendEventWithName:@"PublisherQualityUpdate"
                            body:@{@"data":@[streamID,
@@ -789,7 +1063,7 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
 # pragma mark player
 - (void)onPlayerStateUpdate:(ZegoPlayerState)state errorCode:(int)errorCode extendedData:(nullable NSDictionary *)extendedData streamID:(NSString *)streamID
 {
-    ZGLog(@"[onPlayerStateUpdate] state: %lu, error: %d", state, errorCode);
+    ZGLog(@"[onPlayerStateUpdate] state: %lu, error: %d", (unsigned long)state, errorCode);
     if(self.hasListeners) {
         NSString *extendDataStr = @"";
         if(extendedData) {
@@ -808,7 +1082,6 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
 
 - (void)onPlayerQualityUpdate:(ZegoPlayStreamQuality *)quality streamID:(NSString *)streamID
 {
-    ZGLog(@"[onPlayerQualityUpdate] quality: %@, stream id: %@", quality, streamID);
     if(self.hasListeners) {
         [self sendEventWithName:@"PlayerQualityUpdate"
                            body:@{@"data":@[streamID,
@@ -933,6 +1206,39 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
     }
 }
 
+- (void)mediaPlayer:(ZegoMediaPlayer *)mediaPlayer stateUpdate:(ZegoMediaPlayerState)state errorCode:(int)errorCode
+{
+    ZGLog(@"[onMediaPlayerStateUpdate] player: %@, state: %lu, error: %d", mediaPlayer, (unsigned long)state, errorCode);
+    if(self.hasListeners) {
+        [self sendEventWithName:@"MediaPlayerStateUpdate"
+                           body:@{@"data": @[@(state),
+                                             @(errorCode)],
+                                  @"idx": mediaPlayer.index
+                           }];
+    }
+}
+
+- (void)mediaPlayer:(ZegoMediaPlayer *)mediaPlayer networkEvent:(ZegoMediaPlayerNetworkEvent)networkEvent
+{
+    ZGLog(@"[onMediaPlayerNetworkEvent] player: %@, event: %lu", mediaPlayer, (unsigned long)networkEvent);
+    if(self.hasListeners) {
+        [self sendEventWithName:@"MediaPlayerNetworkEvent"
+                           body:@{@"data": @[@(networkEvent)],
+                                  @"idx": mediaPlayer.index
+                           }];
+    }
+}
+
+- (void)mediaPlayer:(ZegoMediaPlayer *)mediaPlayer playingProgress:(unsigned long long)millisecond
+{
+    if(self.hasListeners) {
+        [self sendEventWithName:@"MediaPlayerPlayingProgress"
+                           body:@{@"data": @[@(millisecond)],
+                                  @"idx": mediaPlayer.index
+                           }];
+    }
+}
+
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[
@@ -957,7 +1263,10 @@ RCT_EXPORT_METHOD(setBeautifyOption:(NSDictionary *)option
       @"RemoteSoundLevelUpdate",
       @"DeviceError",
       @"RemoteCameraStateUpdate",
-      @"RemoteMicStateUpdate"
+      @"RemoteMicStateUpdate",
+      @"MediaPlayerStateUpdate",
+      @"MediaPlayerNetworkEvent",
+      @"MediaPlayerPlayingProgress"
       ];
 }
 

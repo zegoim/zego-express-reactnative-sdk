@@ -1,3 +1,5 @@
+import { ZegoEventListener, ZegoMediaPlayerListener } from "zego-express-engine-reactnative/src/ZegoExpressEventHandler"
+
 export enum ZegoScenario {
     General = 0,
     Communication = 1,
@@ -30,6 +32,14 @@ export enum ZegoVideoConfigPreset {
     Preset1080P = 5,
 }
 
+export enum ZegoAudioConfigPreset {
+    BasicQuality = 0,
+    StandardQuality = 1,
+    StandardQualityStereo = 2,
+    HighQuality = 3,
+    HighQualityStereo = 4,
+}
+
 export enum ZegoVideoCodecID {
     Default = 0,
     Svc = 1,
@@ -42,6 +52,48 @@ export enum ZegoViewMode {
     ScaleToFill = 2,
 }
 
+export enum ZegoVideoMirrorMode {
+    OnlyPreviewMirror = 0,
+    BothMirror = 1,
+    NoMirror = 2,
+    OnlyPublishMirror = 3,
+}
+
+export enum ZegoAudioChannel {
+    Unknown,
+    Mono,
+    Stereo
+}
+
+export enum ZegoAudioCodecID {
+    Default,
+    Normal,
+    Normal2,
+    Normal3,
+    Low,
+    Low2,
+    Low3
+}
+
+export enum ZegoOrientation {
+    portraitUp,
+    landscapeLeft,
+    portraitDown,
+    landscapeRight,
+}
+
+export enum ZegoAECMode {
+    Aggressive,
+    Medium,
+    Soft
+}
+
+export enum ZegoANSMode {
+    Soft,
+    Medium,
+    Aggressive
+}
+
 export enum ZegoPlayerState {
     NoPlay = 0,
     PlayRequesting = 1,
@@ -52,6 +104,28 @@ export enum ZegoPlayerVideoLayer {
     Auto = 0,
     Base = 1,
     Extend = 2,
+}
+
+export enum ZegoMediaPlayerState {
+    NoPlay,
+    Playing,
+    Pausing,
+    PlayEnded
+}
+
+export enum ZegoMediaPlayerNetworkEvent {
+    BufferBegin,
+    BufferEnded
+}
+
+export class ZegoLogConfig {
+    logPath?: string
+    logSize?: number
+}
+
+export class ZegoEngineConfig {
+    logConfig?: ZegoLogConfig
+    advancedConfig: {[key: string]: string}
 }
 
 export class ZegoUser {
@@ -178,6 +252,54 @@ export class ZegoVideoConfig {
     }
 }
 
+export class ZegoAudioConfig {
+    bitrate: number
+    channel: ZegoAudioChannel
+    codecID: ZegoAudioCodecID
+
+    constructor(preset: ZegoAudioConfigPreset) {
+        this.codecID = ZegoAudioCodecID.Default;
+        switch (preset) {
+            case ZegoAudioConfigPreset.BasicQuality:
+                this.bitrate = 16;
+                this.channel = ZegoAudioChannel.Mono;
+                break;
+            case ZegoAudioConfigPreset.StandardQuality:
+                this.bitrate = 48;
+                this.channel = ZegoAudioChannel.Mono;
+                break;
+            case ZegoAudioConfigPreset.StandardQualityStereo:
+                this.bitrate = 56;
+                this.channel = ZegoAudioChannel.Stereo;
+                break;
+            case ZegoAudioConfigPreset.HighQuality:
+                this.bitrate = 128;
+                this.channel = ZegoAudioChannel.Mono;
+                break;
+            case ZegoAudioConfigPreset.HighQualityStereo:
+                this.bitrate = 192;
+                this.channel = ZegoAudioChannel.Stereo;
+                break;
+            default:
+                this.bitrate = 48;
+                this.channel = ZegoAudioChannel.Mono;
+                break;
+        }
+    }
+}
+
+export class ZegoBeautifyOption {
+    polishStep: number
+    whitenFactor: number
+    sharpenFactor: number
+
+    constructor() {
+        this.polishStep = 0.2;
+        this.whitenFactor = 0.5;
+        this.sharpenFactor = 0.1;
+    }
+}
+
 export class ZegoPlayerConfig {
     cdnConfig: ZegoCDNConfig
     videoLayer: ZegoPlayerVideoLayer
@@ -186,4 +308,45 @@ export class ZegoPlayerConfig {
         this.cdnConfig = cdnConfig;
         this.videoLayer = videoLayer;
     }
+}
+
+export abstract class ZegoMediaPlayer {
+    
+    abstract on<MediaPlayerEventType extends keyof ZegoMediaPlayerListener>(event: MediaPlayerEventType, callback: ZegoMediaPlayerListener[MediaPlayerEventType]): void;
+
+    abstract off<MediaPlayerEventType extends keyof ZegoMediaPlayerListener>(event: MediaPlayerEventType, callback?: ZegoMediaPlayerListener[MediaPlayerEventType]): void;
+
+    abstract loadResource(path: string): Promise<void>;
+
+    abstract start(): Promise<void>;
+
+    abstract stop(): Promise<void>;
+
+    abstract pause(): Promise<void>;
+
+    abstract resume(): Promise<void>;
+
+    abstract setPlayerView(view: ZegoView): Promise<void>;
+
+    abstract seekTo(millisecond: number): Promise<void>;
+
+    abstract enableRepeat(enable: boolean): Promise<void>;
+
+    abstract enableAux(enable: boolean): Promise<void>;
+
+    abstract muteLocal(mute: boolean): Promise<void>;
+
+    abstract setVolume(volume: number): Promise<void>;
+
+    abstract setProgressInterval(millisecond: number): Promise<void>;
+
+    abstract getVolume(): Promise<number>;
+
+    abstract getTotalDuration(): Promise<number>;
+
+    abstract getCurrentProgress(): Promise<number>;
+
+    abstract getCurrentState(): Promise<ZegoMediaPlayerState>;
+
+    abstract getIndex(): number;
 }

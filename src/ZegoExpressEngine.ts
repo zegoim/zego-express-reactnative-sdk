@@ -10,7 +10,8 @@ import {
     ZegoView,
     ZegoCDNConfig,
     ZegoVideoConfig,
-    ZegoPlayerConfig
+    ZegoPlayerConfig,
+    ZegoMediaPlayer
 } from "./ZegoExpressDefines"
 import { ZegoEventListener} from './ZegoExpressEventHandler';
 import {ZegoExpressEngineImpl} from './impl/ZegoExpressEngineImpl';
@@ -38,11 +39,11 @@ export default class ZegoExpressEngine {
         return ZegoExpressEngineImpl.getInstance().uploadLog();
     }
 
-    on<EventType extends keyof ZegoEventListener>(event: EventType, callback: ZegoEventListener[EventType]) {
+    on<EventType extends keyof ZegoEventListener>(event: EventType, callback: ZegoEventListener[EventType]): void {
         return ZegoExpressEngineImpl.getInstance().on(event, callback);
     }
 
-    off<EventType extends keyof ZegoEventListener>(event: EventType, callback?: ZegoEventListener[EventType]) {
+    off<EventType extends keyof ZegoEventListener>(event: EventType, callback?: ZegoEventListener[EventType]): void {
         return ZegoExpressEngineImpl.getInstance().on(event, callback);
     }
 
@@ -84,6 +85,14 @@ export default class ZegoExpressEngine {
 
     stopPlayingStream(streamID: string): Promise<void> {
         return ZegoExpressEngineImpl.getInstance().stopPlayingStream(streamID);
+    }
+
+    createMediaPlayer(): Promise<ZegoMediaPlayer> {
+        return ZegoExpressEngineImpl.getInstance().createMediaPlayer();
+    }
+
+    destroyMediaPlayer(mediaPlayer: ZegoMediaPlayer): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().destroyMediaPlayer(mediaPlayer);
     }
 
 }
