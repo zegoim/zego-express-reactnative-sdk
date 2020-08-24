@@ -1,17 +1,19 @@
 import {
     ZegoScenario,
-    ZegoRoomState,
     ZegoPublishChannel,
-    ZegoPublisherState,
-    ZegoViewMode,
-    ZegoPlayerVideoLayer,
     ZegoUser,
     ZegoRoomConfig,
     ZegoView,
-    ZegoCDNConfig,
     ZegoVideoConfig,
     ZegoPlayerConfig,
-    ZegoMediaPlayer
+    ZegoMediaPlayer,
+    ZegoEngineConfig,
+    ZegoVideoMirrorMode,
+    ZegoOrientation,
+    ZegoAudioConfig,
+    ZegoAECMode,
+    ZegoANSMode,
+    ZegoBeautifyOption
 } from "./ZegoExpressDefines"
 import { ZegoEventListener} from './ZegoExpressEventHandler';
 import {ZegoExpressEngineImpl} from './impl/ZegoExpressEngineImpl';
@@ -29,6 +31,10 @@ export default class ZegoExpressEngine {
 
     static destroyEngine(): Promise<void> {
         return ZegoExpressEngineImpl.destroyEngine();
+    }
+
+    static setEngineConfig(config: ZegoEngineConfig): Promise<void> {
+        return ZegoExpressEngineImpl.setEngineConfig(config);
     }
 
     getVersion(): Promise<string> {
@@ -79,12 +85,128 @@ export default class ZegoExpressEngine {
         return ZegoExpressEngineImpl.getInstance().getVideoConfig(channel);
     }
 
+    setVideoMirrorMode(mode: ZegoVideoMirrorMode, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setVideoMirrorMode(mode, channel);
+    }
+
+    setAppOrientation(orientation: ZegoOrientation, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setAppOrientation(orientation, channel);
+    }
+
+    setAudioConfig(config: ZegoAudioConfig): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setAudioConfig(config);
+    }
+
+    getAudioConfig(): Promise<ZegoAudioConfig> {
+        return ZegoExpressEngineImpl.getInstance().getAudioConfig();
+    }
+    
+    mutePublishStreamAudio(mute: boolean, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().mutePublishStreamAudio(mute, channel);
+    }
+
+    mutePublishStreamVideo(mute: boolean, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().mutePublishStreamVideo(mute, channel);
+    }
+
+    setCaptureVolume(volume: number): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setCaptureVolume(volume);
+    }
+
+    enableHardwareEncoder(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableHardwareEncoder(enable);
+    }
+
     startPlayingStream(streamID: string, view: ZegoView, config?: ZegoPlayerConfig): Promise<void> {
         return ZegoExpressEngineImpl.getInstance().startPlayingStream(streamID, view, config);
     }
 
     stopPlayingStream(streamID: string): Promise<void> {
         return ZegoExpressEngineImpl.getInstance().stopPlayingStream(streamID);
+    }
+
+    setPlayVolume(volume: number): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setPlayVolume(volume);
+    }
+
+    mutePlayStreamAudio(streamID: string, mute: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().mutePlayStreamAudio(streamID, mute);
+    }
+
+    mutePlayStreamVideo(streamID: string, mute: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().mutePlayStreamVideo(streamID, mute);
+    }
+
+    enableHardwareDecoder(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableHardwareDecoder(enable);
+    }
+
+    muteMicrophone(mute: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().muteMicrophone(mute);
+    }
+
+    isMicrophoneMuted(): Promise<boolean> {
+        return ZegoExpressEngineImpl.getInstance().isMicrophoneMuted();
+    }
+
+    muteSpeaker(mute: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().muteSpeaker(mute);
+    }
+
+    isSpeakerMuted(): Promise<boolean> {
+        return ZegoExpressEngineImpl.getInstance().isSpeakerMuted();
+    }
+
+    enableAudioCaptureDevice(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableAudioCaptureDevice(enable);
+    }
+
+    enableCamera(enable: boolean, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableCamera(enable, channel);
+    }
+
+    useFrontCamera(enable: boolean, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().useFrontCamera(enable, channel);
+    }    
+
+    startSoundLevelMonitor(): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().startSoundLevelMonitor();
+    }
+
+    stopSoundLevelMonitor(): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().stopSoundLevelMonitor();
+    }
+
+    enableAEC(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableAEC(enable);
+    }
+
+    enableHeadphoneAEC(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableHeadphoneAEC(enable);
+    }
+
+    setAECMode(mode: ZegoAECMode): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setAECMode(mode);
+    }
+
+    enableAGC(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableAGC(enable);
+    }
+
+    enableANS(enable: boolean): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableANS(enable);
+    }
+
+    setANSMode(mode: ZegoANSMode): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setANSMode(mode);
+    }
+
+    enableBeautify(feature: number, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().enableBeautify(feature, channel);
+    }
+
+    setBeautifyOption(option: ZegoBeautifyOption, channel?:ZegoPublishChannel): Promise<void> {
+        return ZegoExpressEngineImpl.getInstance().setBeautifyOption(option, channel);
     }
 
     createMediaPlayer(): Promise<ZegoMediaPlayer> {

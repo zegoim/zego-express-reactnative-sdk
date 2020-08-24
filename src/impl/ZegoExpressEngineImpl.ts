@@ -156,7 +156,7 @@ export class ZegoExpressEngineImpl {
         return ZegoExpressNativeModule.setAudioConfig(config);
     }
 
-    getAudioConfig(): Promise<void> {
+    getAudioConfig(): Promise<ZegoAudioConfig> {
         return ZegoExpressNativeModule.getAudioConfig();
     }
 
