@@ -72,6 +72,7 @@ RCT_EXPORT_METHOD(destroyEngine:(RCTPromiseResolveBlock)resolve
     
     if(self.isInited) {
         [ZegoExpressEngine destroyEngine:^{
+            self.isInited = NO;
             resolve(nil);
         }];
     } else {
@@ -376,6 +377,7 @@ RCT_EXPORT_METHOD(startPlayingStream:(NSString *)streamID
         NSDictionary *cdnConfig = [RCTConvert NSDictionary:config[@"cdnConfig"]];
         ZegoCDNConfig *cdnConfigObj = nil;
         if(cdnConfig) {
+            cdnConfigObj = [[ZegoCDNConfig alloc] init];
             cdnConfigObj.url = [RCTConvert NSString:cdnConfig[@"url"]];
             cdnConfigObj.authParam = [RCTConvert NSString:cdnConfig[@"authParam"]];
         }
@@ -654,13 +656,16 @@ RCT_EXPORT_METHOD(destroyMediaPlayer:(nonnull NSNumber *)index
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     ZGLog(@"destroyMediaPlayer, index: %@", index);
-    ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
+    
+    if(self.mediaPlayerMap) {
+        ZegoMediaPlayer *mediaPlayer = self.mediaPlayerMap[index];
 
-    if (mediaPlayer) {
-        [[ZegoExpressEngine sharedEngine] destroyMediaPlayer:mediaPlayer];
+        if (mediaPlayer) {
+            [[ZegoExpressEngine sharedEngine] destroyMediaPlayer:mediaPlayer];
+        }
+
+        [self.mediaPlayerMap removeObjectForKey:index];
     }
-
-    [self.mediaPlayerMap removeObjectForKey:index];
     
     resolve(nil);
 }
