@@ -20,7 +20,9 @@ import {
     ZegoANSMode,
     ZegoBeautifyOption,
     ZegoMediaPlayer,
-    ZegoMediaPlayerState
+    ZegoMediaPlayerState,
+    ZegoMediaPlayerLoadResourceResult,
+    ZegoMediaPlayerSeekToResult
 } from "../ZegoExpressDefines"
 import { ZegoEventListener, ZegoAnyCallback, ZegoMediaPlayerListener } from '../ZegoExpressEventHandler';
 
@@ -335,7 +337,7 @@ export class ZegoMediaPlayerImpl extends ZegoMediaPlayer {
         }
     }
 
-    loadResource(path: string): Promise<void> {
+    loadResource(path: string): Promise<ZegoMediaPlayerLoadResourceResult> {
         return ZegoExpressNativeModule.mediaPlayerLoadResource(this._index, path);
     }
 
@@ -359,7 +361,7 @@ export class ZegoMediaPlayerImpl extends ZegoMediaPlayer {
         return ZegoExpressNativeModule.mediaPlayerSetPlayerCanvas(this._index, view);
     }
 
-    seekTo(millisecond: number): Promise<void> {
+    seekTo(millisecond: number): Promise<ZegoMediaPlayerSeekToResult> {
         return ZegoExpressNativeModule.mediaPlayerSeekTo(this._index, millisecond);
     }
 

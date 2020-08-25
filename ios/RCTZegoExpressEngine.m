@@ -689,7 +689,7 @@ RCT_EXPORT_METHOD(mediaPlayerLoadResource:(nonnull NSNumber *)index
     
     if (mediaPlayer) {
         [mediaPlayer loadResource:path callback:^(int errorCode) {
-            resolve(@(errorCode));
+            resolve(@{@"errorCode":@(errorCode)});
         }];
     }
 }
@@ -761,7 +761,7 @@ RCT_EXPORT_METHOD(mediaPlayerSeekTo:(nonnull NSNumber *)index
     if (mediaPlayer) {
 
         [mediaPlayer seekTo:millisecond callback:^(int errorCode) {
-            resolve(@(errorCode));
+            resolve(@{@"errorCode":@(errorCode)});
         }];
     }
 }

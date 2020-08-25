@@ -1,4 +1,4 @@
-import { ZegoEventListener, ZegoMediaPlayerListener } from "zego-express-engine-reactnative/src/ZegoExpressEventHandler"
+import { ZegoMediaPlayerListener } from "./ZegoExpressEventHandler"
 
 export enum ZegoScenario {
     General = 0,
@@ -310,13 +310,21 @@ export class ZegoPlayerConfig {
     }
 }
 
+export interface ZegoMediaPlayerLoadResourceResult {
+    errorCode: number
+}
+
+export interface ZegoMediaPlayerSeekToResult {
+    errorCode: number
+}
+
 export abstract class ZegoMediaPlayer {
     
     abstract on<MediaPlayerEventType extends keyof ZegoMediaPlayerListener>(event: MediaPlayerEventType, callback: ZegoMediaPlayerListener[MediaPlayerEventType]): void;
 
     abstract off<MediaPlayerEventType extends keyof ZegoMediaPlayerListener>(event: MediaPlayerEventType, callback?: ZegoMediaPlayerListener[MediaPlayerEventType]): void;
 
-    abstract loadResource(path: string): Promise<void>;
+    abstract loadResource(path: string): Promise<ZegoMediaPlayerLoadResourceResult>;
 
     abstract start(): Promise<void>;
 
@@ -328,7 +336,7 @@ export abstract class ZegoMediaPlayer {
 
     abstract setPlayerView(view: ZegoView): Promise<void>;
 
-    abstract seekTo(millisecond: number): Promise<void>;
+    abstract seekTo(millisecond: number): Promise<ZegoMediaPlayerSeekToResult>;
 
     abstract enableRepeat(enable: boolean): Promise<void>;
 
