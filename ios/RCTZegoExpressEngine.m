@@ -3,6 +3,10 @@
 #import <React/RCTConvert.h>
 #import "ZegoLog.h"
 
+static NSString* PREFIX = @"im.zego.reactnative.";
+
+# define RN_EVENT(oc_method_name) [NSString stringWithFormat:@"%@%@", PREFIX, oc_method_name]
+
 @interface RCTZegoExpressNativeModule()<ZegoEventHandler, ZegoMediaPlayerEventHandler>
 
 @property (nonatomic, assign) BOOL isInited;
@@ -24,6 +28,11 @@ RCT_EXPORT_MODULE()
 + (BOOL)requiresMainQueueSetup
 {
   return YES;  // only do this if your module initialization relies on calling UIKit!
+}
+
+- (NSDictionary *)constantsToExport
+{
+    return @{@"prefix": PREFIX};
 }
 
 -(void)startObserving {
@@ -1242,31 +1251,31 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (NSArray<NSString *> *)supportedEvents
 {
   return @[
-      @"DebugError",
-      @"RoomStateUpdate",
-      @"RoomUserUpdate",
-      @"RoomOnlineUserCountUpdate",
-      @"RoomStreamUpdate",
-      @"PublisherStateUpdate",
-      @"PublisherQualityUpdate",
-      @"PublisherCapturedAudioFirstFrame",
-      @"PublisherCapturedVideoFirstFrame",
-      @"PublisherVideoSizeChanged",
-      @"PlayerStateUpdate",
-      @"PlayerQualityUpdate",
-      @"PlayerMediaEvent",
-      @"PlayerRecvAudioFirstFrame",
-      @"PlayerRecvVideoFirstFrame",
-      @"PlayerRenderVideoFirstFrame",
-      @"PlayerVideoSizeChanged",
-      @"CapturedSoundLevelUpdate",
-      @"RemoteSoundLevelUpdate",
-      @"DeviceError",
-      @"RemoteCameraStateUpdate",
-      @"RemoteMicStateUpdate",
-      @"MediaPlayerStateUpdate",
-      @"MediaPlayerNetworkEvent",
-      @"MediaPlayerPlayingProgress"
+      RN_EVENT(@"DebugError"),
+      RN_EVENT(@"RoomStateUpdate"),
+      RN_EVENT(@"RoomUserUpdate"),
+      RN_EVENT(@"RoomOnlineUserCountUpdate"),
+      RN_EVENT(@"RoomStreamUpdate"),
+      RN_EVENT(@"PublisherStateUpdate"),
+      RN_EVENT(@"PublisherQualityUpdate"),
+      RN_EVENT(@"PublisherCapturedAudioFirstFrame"),
+      RN_EVENT(@"PublisherCapturedVideoFirstFrame"),
+      RN_EVENT(@"PublisherVideoSizeChanged"),
+      RN_EVENT(@"PlayerStateUpdate"),
+      RN_EVENT(@"PlayerQualityUpdate"),
+      RN_EVENT(@"PlayerMediaEvent"),
+      RN_EVENT(@"PlayerRecvAudioFirstFrame"),
+      RN_EVENT(@"PlayerRecvVideoFirstFrame"),
+      RN_EVENT(@"PlayerRenderVideoFirstFrame"),
+      RN_EVENT(@"PlayerVideoSizeChanged"),
+      RN_EVENT(@"CapturedSoundLevelUpdate"),
+      RN_EVENT(@"RemoteSoundLevelUpdate"),
+      RN_EVENT(@"DeviceError"),
+      RN_EVENT(@"RemoteCameraStateUpdate"),
+      RN_EVENT(@"RemoteMicStateUpdate"),
+      RN_EVENT(@"MediaPlayerStateUpdate"),
+      RN_EVENT(@"MediaPlayerNetworkEvent"),
+      RN_EVENT(@"MediaPlayerPlayingProgress")
       ];
 }
 

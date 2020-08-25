@@ -28,6 +28,8 @@ import { ZegoEventListener, ZegoAnyCallback, ZegoMediaPlayerListener } from '../
 
 const { ZegoExpressNativeModule } = NativeModules;
 
+const Prefix = ZegoExpressNativeModule.prefix;
+
 const ZegoEvent = new NativeEventEmitter(ZegoExpressNativeModule);
 
 let engine: ZegoExpressEngineImpl | undefined;
@@ -59,7 +61,7 @@ export class ZegoExpressEngineImpl {
     static destroyEngine(): Promise<void> {
         engine = undefined;
         ZegoExpressEngineImpl._listeners.forEach((value , key) =>{
-            ZegoEvent.removeAllListeners(key);
+            ZegoEvent.removeAllListeners(Prefix + key);
         });
 
         ZegoExpressEngineImpl._mediaPlayerMap.forEach((vaule, key) => {
@@ -96,20 +98,20 @@ export class ZegoExpressEngineImpl {
             ZegoExpressEngineImpl._listeners.set(event, map)
         }
         map.set(callback, native_listener);
-        ZegoEvent.addListener(event, native_listener);
+        ZegoEvent.addListener(Prefix + event, native_listener);
         ZegoExpressEngineImpl._listeners.set(event, map);
     }
 
     off<EventType extends keyof ZegoEventListener>(event: EventType, callback?: ZegoEventListener[EventType]): void {
 
         if(callback === undefined) {
-            ZegoEvent.removeAllListeners(event);
+            ZegoEvent.removeAllListeners(Prefix + event);
             ZegoExpressEngineImpl._listeners.delete(event);
         } else {
             const map = ZegoExpressEngineImpl._listeners.get(event);
             if (map === undefined)
                 return;
-            ZegoEvent.removeListener(event, map.get(callback) as ZegoAnyCallback);
+            ZegoEvent.removeListener(Prefix + event, map.get(callback) as ZegoAnyCallback);
             map.delete(callback)
         }
     }
@@ -320,19 +322,19 @@ export class ZegoMediaPlayerImpl extends ZegoMediaPlayer {
             ZegoExpressEngineImpl._listeners.set(event, map)
         }
         map.set(callback, native_listener);
-        ZegoEvent.addListener(event, native_listener);
+        ZegoEvent.addListener(Prefix + event, native_listener);
         ZegoExpressEngineImpl._listeners.set(event, map);
     }
 
     off<MediaPlayerEventType extends keyof ZegoMediaPlayerListener>(event: MediaPlayerEventType, callback?: ZegoMediaPlayerListener[MediaPlayerEventType]): void {
         if(callback === undefined) {
-            ZegoEvent.removeAllListeners(event);
+            ZegoEvent.removeAllListeners(Prefix + event);
             ZegoExpressEngineImpl._listeners.delete(event);
         } else {
             const map = ZegoExpressEngineImpl._listeners.get(event);
             if (map === undefined)
                 return;
-            ZegoEvent.removeListener(event, map.get(callback) as ZegoAnyCallback);
+            ZegoEvent.removeListener(Prefix + event, map.get(callback) as ZegoAnyCallback);
             map.delete(callback)
         }
     }
