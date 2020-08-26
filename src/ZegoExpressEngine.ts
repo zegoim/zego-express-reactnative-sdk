@@ -25,7 +25,7 @@ export default class ZegoExpressEngine {
         return ZegoExpressEngineImpl.getInstance();
     }
 
-    static async createEngine(appID: number, appSign: string, isTestEnv: boolean, scenario: ZegoScenario): Promise<ZegoExpressEngine> {
+    static createEngine(appID: number, appSign: string, isTestEnv: boolean, scenario: ZegoScenario): Promise<ZegoExpressEngine> {
         return ZegoExpressEngineImpl.createEngine(appID, appSign, isTestEnv, scenario);
     }
 
@@ -50,7 +50,7 @@ export default class ZegoExpressEngine {
     }
 
     off<EventType extends keyof ZegoEventListener>(event: EventType, callback?: ZegoEventListener[EventType]): void {
-        return ZegoExpressEngineImpl.getInstance().on(event, callback);
+        return ZegoExpressEngineImpl.getInstance().off(event, callback);
     }
 
     loginRoom(roomID: string, user: ZegoUser, config?: ZegoRoomConfig): Promise<void> {
