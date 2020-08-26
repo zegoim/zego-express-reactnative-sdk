@@ -915,7 +915,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onDebugError] error: %d, func name: %@, info: %@", errorCode, funcName, info);
     if(self.hasListeners) {
-        [self sendEventWithName:@"DebugError"
+        [self sendEventWithName:RN_EVENT(@"DebugError")
                            body:@{@"data":@[@(errorCode),
                                             funcName,
                                             info]
@@ -934,7 +934,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
             extendDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         
-        [self sendEventWithName:@"RoomStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"RoomStateUpdate")
                            body:@{@"data":@[roomID,
                                             @(state),
                                             @(errorCode),
@@ -955,7 +955,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
             }];
         }
         
-        [self sendEventWithName:@"RoomUserUpdate"
+        [self sendEventWithName:RN_EVENT(@"RoomUserUpdate")
                            body:@{@"data":@[roomID,
                                             @(updateType),
                                             userListArray]
@@ -969,7 +969,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onRoomOnlineUserCountUpdate] room id: %@, count: %d", roomID, count);
     if(self.hasListeners) {
-        [self sendEventWithName:@"RoomOnlineUserCountUpdate"
+        [self sendEventWithName:RN_EVENT(@"RoomOnlineUserCountUpdate")
                            body:@{@"data":@[roomID,
                                             @(count)]
                                                                     
@@ -992,7 +992,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
                 @"extraInfo": stream.extraInfo
             }];
         }
-        [self sendEventWithName:@"RoomStreamUpdate"
+        [self sendEventWithName:RN_EVENT(@"RoomStreamUpdate")
                            body:@{@"data":@[roomID,
                                             @(updateType),
                                             streamListArray]
@@ -1012,7 +1012,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
             extendDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         
-        [self sendEventWithName:@"PublisherStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"PublisherStateUpdate")
                            body:@{@"data":@[streamID,
                                             @(state),
                                             @(errorCode),
@@ -1024,7 +1024,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (void)onPublisherQualityUpdate:(ZegoPublishStreamQuality *)quality streamID:(NSString *)streamID
 {
     if(self.hasListeners) {
-        [self sendEventWithName:@"PublisherQualityUpdate"
+        [self sendEventWithName:RN_EVENT(@"PublisherQualityUpdate")
                            body:@{@"data":@[streamID,
                                             @{@"videoCaptureFPS":@(quality.videoCaptureFPS),
                                               @"videoEncodeFPS":@(quality.videoEncodeFPS),
@@ -1048,7 +1048,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPublisherCapturedAudioFirstFrame]");
     if(self.hasListeners) {
-        [self sendEventWithName:@"PublisherCapturedAudioFirstFrame" body:@{@"data":@[]}];
+        [self sendEventWithName:RN_EVENT(@"PublisherCapturedAudioFirstFrame") body:@{@"data":@[]}];
     }
     
 }
@@ -1057,7 +1057,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[PublisherCapturedVideoFirstFrame] channel: %lu", (unsigned long)channel);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PublisherCapturedVideoFirstFrame" body:@{@"data":@[@(channel)]}];
+        [self sendEventWithName:RN_EVENT(@"PublisherCapturedVideoFirstFrame") body:@{@"data":@[@(channel)]}];
     }
 }
 
@@ -1065,7 +1065,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPublisherVideoSizeChanged] size: (%f, %f), channel: %lu",size.width, size.height, (unsigned long)channel);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PublisherVideoSizeChanged"
+        [self sendEventWithName:RN_EVENT(@"PublisherVideoSizeChanged")
                            body:@{@"data":@[@(size.width),
                                             @(size.height),
                                             @(channel)]
@@ -1085,7 +1085,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
             extendDataStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         }
         
-        [self sendEventWithName:@"PlayerStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"PlayerStateUpdate")
                            body:@{@"data":@[streamID,
                                             @(state),
                                             @(errorCode),
@@ -1097,7 +1097,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (void)onPlayerQualityUpdate:(ZegoPlayStreamQuality *)quality streamID:(NSString *)streamID
 {
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerQualityUpdate"
+        [self sendEventWithName:RN_EVENT(@"PlayerQualityUpdate")
                            body:@{@"data":@[streamID,
                                             @{@"videoRecvFPS": @(quality.videoRecvFPS),
                                               @"videoDecodeFPS": @(quality.videoDecodeFPS),
@@ -1110,6 +1110,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
                                               @"rtt": @(quality.rtt),
                                               @"packetLostRate": @(quality.packetLostRate),
                                               @"peerToPeerPacketLostRate": @(quality.peerToPeerPacketLostRate),
+                                              @"peerToPeerDelay": @(quality.peerToPeerDelay),
                                               @"level": @(quality.level),
                                               @"delay": @(quality.delay),
                                               @"isHardwareDecode": @(quality.isHardwareDecode),
@@ -1124,7 +1125,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPlayerMediaEvent] event: %lu, stream id: %@", (unsigned long)event, streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerMediaEvent"
+        [self sendEventWithName:RN_EVENT(@"PlayerMediaEvent")
                            body:@{@"data":@[streamID,
                                             @(event)]
                            }];
@@ -1135,7 +1136,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPlayerRecvAudioFirstFrame] stream id: %@", streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerRecvAudioFirstFrame"
+        [self sendEventWithName:RN_EVENT(@"PlayerRecvAudioFirstFrame")
                            body:@{@"data":@[streamID]}];
     }
 }
@@ -1144,7 +1145,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPlayerRecvVideoFirstFrame] stream id: %@", streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerRecvVideoFirstFrame"
+        [self sendEventWithName:RN_EVENT(@"PlayerRecvVideoFirstFrame")
                            body:@{@"data":@[streamID]}];
     }
 }
@@ -1153,7 +1154,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPlayerRenderVideoFirstFrame] stream id: %@", streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerRenderVideoFirstFrame"
+        [self sendEventWithName:RN_EVENT(@"PlayerRenderVideoFirstFrame")
                            body:@{@"data":@[streamID]}];
     }
 }
@@ -1162,7 +1163,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onPlayerVideoSizeChanged] size: (%f, %f), stream id: %@", size.width, size.height, streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"PlayerVideoSizeChanged"
+        [self sendEventWithName:RN_EVENT(@"PlayerVideoSizeChanged")
                            body:@{@"data":@[streamID,
                                             @(size.width),
                                             @(size.height)]
@@ -1174,7 +1175,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (void)onCapturedSoundLevelUpdate:(NSNumber *)soundLevel
 {
     if(self.hasListeners) {
-        [self sendEventWithName:@"CapturedSoundLevelUpdate"
+        [self sendEventWithName:RN_EVENT(@"CapturedSoundLevelUpdate")
                            body:@{@"data":@[soundLevel]}];
     }
 }
@@ -1182,7 +1183,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (void)onRemoteSoundLevelUpdate:(NSDictionary<NSString *, NSNumber *> *)soundLevels
 {
     if(self.hasListeners) {
-        [self sendEventWithName:@"RemoteSoundLevelUpdate"
+        [self sendEventWithName:RN_EVENT(@"RemoteSoundLevelUpdate")
                            body:@{@"data":@[soundLevels]}];
     }
 }
@@ -1191,7 +1192,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onDeviceError] error: %d, device name: %@", errorCode, deviceName);
     if(self.hasListeners) {
-        [self sendEventWithName:@"DeviceError"
+        [self sendEventWithName:RN_EVENT(@"DeviceError")
                            body:@{@"data":@[@(errorCode),
                                             deviceName]
                            }];
@@ -1202,7 +1203,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onRemoteCameraStateUpdate] state: %lu, stream id: %@", (unsigned long)state, streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"RemoteCameraStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"RemoteCameraStateUpdate")
                            body:@{@"data":@[streamID,
                                             @(state)]
                            }];
@@ -1213,7 +1214,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onRemoteMicStateUpdate] state: %lu, stream id: %@", (unsigned long)state, streamID);
     if(self.hasListeners) {
-        [self sendEventWithName:@"RemoteMicStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"RemoteMicStateUpdate")
                            body:@{@"data":@[streamID,
                                             @(state)]
                            }];
@@ -1224,7 +1225,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onMediaPlayerStateUpdate] player: %@, state: %lu, error: %d", mediaPlayer, (unsigned long)state, errorCode);
     if(self.hasListeners) {
-        [self sendEventWithName:@"MediaPlayerStateUpdate"
+        [self sendEventWithName:RN_EVENT(@"MediaPlayerStateUpdate")
                            body:@{@"data": @[@(state),
                                              @(errorCode)],
                                   @"idx": mediaPlayer.index
@@ -1236,7 +1237,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 {
     ZGLog(@"[onMediaPlayerNetworkEvent] player: %@, event: %lu", mediaPlayer, (unsigned long)networkEvent);
     if(self.hasListeners) {
-        [self sendEventWithName:@"MediaPlayerNetworkEvent"
+        [self sendEventWithName:RN_EVENT(@"MediaPlayerNetworkEvent")
                            body:@{@"data": @[@(networkEvent)],
                                   @"idx": mediaPlayer.index
                            }];
@@ -1246,7 +1247,7 @@ RCT_EXPORT_METHOD(mediaPlayerGetCurrentState:(nonnull NSNumber *)index
 - (void)mediaPlayer:(ZegoMediaPlayer *)mediaPlayer playingProgress:(unsigned long long)millisecond
 {
     if(self.hasListeners) {
-        [self sendEventWithName:@"MediaPlayerPlayingProgress"
+        [self sendEventWithName:RN_EVENT(@"MediaPlayerPlayingProgress")
                            body:@{@"data": @[@(millisecond)],
                                   @"idx": mediaPlayer.index
                            }];

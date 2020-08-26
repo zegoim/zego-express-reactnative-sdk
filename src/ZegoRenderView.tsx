@@ -18,7 +18,7 @@ const ZegoTextureViewManager = Platform.select({
 });
 
 
-export class ZegoSurfaceView extends React.Component {
+export class ZegoSurfaceView extends Component<{}> {
 
     render() {
         return (
