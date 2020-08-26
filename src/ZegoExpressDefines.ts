@@ -12,6 +12,11 @@ export enum ZegoRoomState {
     Connected = 2,
 }
 
+export enum ZegoUpdateType {
+    Add,
+    Delete
+}
+
 export enum ZegoPublishChannel {
     Main = 0,
     Aux = 1,
@@ -75,6 +80,14 @@ export enum ZegoAudioCodecID {
     Low3
 }
 
+export enum ZegoStreamQualityLevel {
+    Excellent,
+    Good,
+    Medium,
+    Bad,
+    Die
+}
+
 export enum ZegoOrientation {
     portraitUp,
     landscapeLeft,
@@ -106,6 +119,46 @@ export enum ZegoPlayerVideoLayer {
     Extend = 2,
 }
 
+export enum ZegoPlayerMediaEvent {
+    AudioBreakOccur,
+    AudioBreakResume,
+    VideoBreakOccur,
+    VideoBreakResume
+}
+
+export enum ZegoRemoteDeviceState {
+    /// Device on
+    Open,
+    /// General device error
+    GenericError,
+    /// Invalid device ID
+    InvalidID,
+    /// No permission
+    NoAuthorization,
+    /// Captured frame rate is 0
+    ZeroFPS,
+    /// The device is occupied
+    InUseByOther,
+    /// The device is not plugged in or unplugged
+    Unplugged,
+    /// The system needs to be restarted
+    RebootRequired,
+    /// System media services stop, such as under the iOS platform, when the system detects that the current pressure is huge (such as playing a lot of animation), it is possible to disable all media related services.
+    SystemMediaServicesLost,
+    /// Capturing disabled
+    Disable,
+    /// The remote device is muted
+    Mute,
+    /// The device is interrupted, such as a phone call interruption, etc.
+    Interruption,
+    /// There are multiple apps at the same time in the foreground, such as the iPad app split screen, the system will prohibit all apps from using the camera.
+    InBackground,
+    /// CDN server actively disconnected
+    MultiForegroundApp,
+    /// The system is under high load pressure and may cause abnormal equipment.
+    BySystemPressure
+}
+
 export enum ZegoMediaPlayerState {
     NoPlay,
     Playing,
@@ -135,6 +188,18 @@ export class ZegoUser {
     constructor(userID: string, userName: string) {
         this.userID = userID;
         this.userName = userName;
+    }
+}
+
+export class ZegoStream {
+    streamID: string
+    user: ZegoUser
+    extraInfo: string
+
+    constructor(streamID: string, user: ZegoUser, extraInfo: string) {
+        this.streamID = streamID;
+        this.user = user;
+        this.extraInfo = extraInfo;
     }
 }
 
@@ -300,6 +365,23 @@ export class ZegoBeautifyOption {
     }
 }
 
+export class ZegoPublishStreamQuality {
+    videoCaptureFPS: number
+    videoEncodeFPS: number
+    videoSendFPS: number
+    videoKBPS: number
+    audioCaptureFPS: number
+    audioSendFPS: number
+    audioKBPS: number
+    rtt: number
+    packetLostRate: number
+    level: ZegoStreamQualityLevel
+    isHardwareEncode: boolean
+    totalSendBytes: number
+    audioSendBytes: number
+    videoSendBytes: number
+}
+
 export class ZegoPlayerConfig {
     cdnConfig: ZegoCDNConfig
     videoLayer: ZegoPlayerVideoLayer
@@ -308,6 +390,27 @@ export class ZegoPlayerConfig {
         this.cdnConfig = cdnConfig;
         this.videoLayer = videoLayer;
     }
+}
+
+export class ZegoPlayStreamQuality {
+    videoRecvFPS: number
+    videoDecodeFPS: number
+    videoRenderFPS: number
+    videoKBPS: number
+    audioRecvFPS: number
+    audioDecodeFPS: number
+    audioRenderFPS: number
+    audioKBPS: number
+    rtt: number
+    packetLostRate: number
+    peerToPeerDelay: number
+    peerToPeerPacketLostRate: number
+    level: ZegoStreamQualityLevel
+    delay: number
+    isHardwareDecode: boolean
+    totalRecvBytes: number
+    audioRecvBytes: number
+    videoRecvBytes: number
 }
 
 export interface ZegoMediaPlayerLoadResourceResult {
