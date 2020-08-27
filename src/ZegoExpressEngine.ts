@@ -21,6 +21,7 @@ import {ZegoExpressEngineImpl} from './impl/ZegoExpressEngineImpl';
 
 export default class ZegoExpressEngine {
     
+    /// Creates a singleton instance of ZegoExpressEngine.
     static instance(): ZegoExpressEngine {
         return ZegoExpressEngineImpl.getInstance();
     }
@@ -209,7 +210,7 @@ export default class ZegoExpressEngine {
         return ZegoExpressEngineImpl.getInstance().setBeautifyOption(option, channel);
     }
 
-    createMediaPlayer(): Promise<ZegoMediaPlayer> {
+    createMediaPlayer(): Promise<ZegoMediaPlayer|null> {
         return ZegoExpressEngineImpl.getInstance().createMediaPlayer();
     }
 

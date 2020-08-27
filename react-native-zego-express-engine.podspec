@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   # optional - use expanded license entry instead:
   # s.license    = { :type => "MIT", :file => "LICENSE" }
-  s.authors      = { "Your Name" => "yourname@email.com" }
+  s.authors      = { "zego.im" => "dev@zego.im" }
   s.platforms    = { :ios => "9.0" }
   s.source       = { :path => '.' }
 
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
-  s.dependency 'ZegoExpressEngine', '1.12.3'
+  s.dependency 'ZegoExpressEngine', '1.14.0'
   # ...
   # s.dependency "..."
 end

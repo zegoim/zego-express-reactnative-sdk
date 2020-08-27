@@ -178,7 +178,11 @@ export class ZegoLogConfig {
 
 export class ZegoEngineConfig {
     logConfig?: ZegoLogConfig
-    advancedConfig: {[key: string]: string}
+    advancedConfig?: {[key: string]: string}
+
+    constructor() {
+
+    }
 }
 
 export class ZegoUser {
@@ -380,6 +384,23 @@ export class ZegoPublishStreamQuality {
     totalSendBytes: number
     audioSendBytes: number
     videoSendBytes: number
+
+    constructor(videoCaptureFPS: number, videoEncodeFPS: number, videoSendFPS: number, videoKBPS: number, audioCaptureFPS: number, audioSendFPS: number, audioKBPS: number, rtt: number, packetLostRate: number, level: ZegoStreamQualityLevel, isHardwareEncode: boolean, totalSendBytes: number, audioSendBytes: number, videoSendBytes: number) {
+        this.videoCaptureFPS = videoCaptureFPS;
+        this.videoEncodeFPS = videoEncodeFPS;
+        this.videoSendFPS = videoSendFPS;
+        this.videoKBPS = videoKBPS;
+        this.audioCaptureFPS = audioCaptureFPS;
+        this.audioSendFPS = audioSendFPS;
+        this.audioKBPS = audioKBPS;
+        this.rtt = rtt;
+        this.packetLostRate = packetLostRate;
+        this.level = level;
+        this.isHardwareEncode = isHardwareEncode;
+        this.totalSendBytes = totalSendBytes;
+        this.audioSendBytes = audioSendBytes;
+        this.videoSendBytes = videoSendBytes;
+    }
 }
 
 export class ZegoPlayerConfig {
@@ -411,6 +432,27 @@ export class ZegoPlayStreamQuality {
     totalRecvBytes: number
     audioRecvBytes: number
     videoRecvBytes: number
+
+    constructor(videoRecvFPS: number, videoDecodeFPS: number, videoRenderFPS: number, videoKBPS: number, audioRecvFPS: number, audioDecodeFPS: number, audioRenderFPS: number, audioKBPS: number, rtt: number, packetLostRate: number, peerToPeerDelay: number, peerToPeerPacketLostRate: number, level: ZegoStreamQualityLevel, delay: number, isHardwareDecode: boolean, totalRecvBytes: number, audioRecvBytes: number, videoRecvBytes: number) {
+        this.videoRecvFPS = videoRecvFPS;
+        this.videoDecodeFPS = videoDecodeFPS;
+        this.videoRenderFPS = videoRenderFPS;
+        this.videoKBPS = videoKBPS;
+        this.audioRecvFPS = audioRecvFPS;
+        this.audioDecodeFPS = audioDecodeFPS;
+        this.audioRenderFPS = audioRenderFPS;
+        this.audioKBPS = audioKBPS;
+        this.rtt = rtt;
+        this.packetLostRate = packetLostRate;
+        this.peerToPeerDelay = peerToPeerDelay;
+        this.peerToPeerPacketLostRate = peerToPeerPacketLostRate;
+        this.level = level;
+        this.delay = delay;
+        this.isHardwareDecode = isHardwareDecode;
+        this.totalRecvBytes = totalRecvBytes;
+        this.audioRecvBytes = audioRecvBytes;
+        this.videoRecvBytes = videoRecvBytes;
+    }
 }
 
 export interface ZegoMediaPlayerLoadResourceResult {

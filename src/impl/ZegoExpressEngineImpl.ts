@@ -267,7 +267,7 @@ export class ZegoExpressEngineImpl {
         return ZegoExpressNativeModule.setBeautifyOption(option, channel??ZegoPublishChannel.Main);
     }
 
-    async createMediaPlayer(): Promise<ZegoMediaPlayer> {
+    async createMediaPlayer(): Promise<ZegoMediaPlayer|null> {
         var index = await ZegoExpressNativeModule.createMediaPlayer();
         if(index >= 0) {
             var mediaPlayer = new ZegoMediaPlayerImpl(index);
@@ -306,7 +306,7 @@ export class ZegoMediaPlayerImpl extends ZegoMediaPlayer {
             const {data, idx} = res;
 
             if(idx >= 0) {
-                let mediaPlayer = ZegoExpressEngineImpl._mediaPlayerMap[idx];
+                let mediaPlayer = ZegoExpressEngineImpl._mediaPlayerMap.get(idx);
                 // @ts-ignore
                 callback(mediaPlayer, ...data);
             }

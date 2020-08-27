@@ -23,7 +23,7 @@ export interface SurfaceViewProps extends ViewProps {
     zOrderOnTop?: boolean;
 }
 
-export class ZegoSurfaceView extends Component<{SurfaceViewProps}> {
+export class ZegoSurfaceView extends Component<SurfaceViewProps, {}> {
 
     render() {
         return (
@@ -32,9 +32,6 @@ export class ZegoSurfaceView extends Component<{SurfaceViewProps}> {
     }
 }
 
-/**
- * @ignore
- */
 export class ZegoTextureView extends Component<{}> {
     render() {
         return (

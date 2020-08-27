@@ -106,6 +106,8 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
         for(Object obj : objects) {
             if(obj instanceof Integer) {
                 data.pushInt((Integer) obj);
+            } else if(obj instanceof Long) {
+                data.pushInt(((Long) obj).intValue());
             } else if(obj instanceof String) {
                 data.pushString((String) obj);
             } else if(obj instanceof Double) {
@@ -134,6 +136,8 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
         for(Object obj : objects) {
             if(obj instanceof Integer) {
                 data.pushInt((Integer) obj);
+            } else if(obj instanceof Long) {
+                data.pushInt(((Long) obj).intValue());
             } else if(obj instanceof String) {
                 data.pushString((String) obj);
             } else if(obj instanceof Double) {
