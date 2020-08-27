@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
-    requireNativeComponent, 
+    requireNativeComponent,
+    ViewProps,
     Platform, 
     View
 } from 'react-native';
@@ -17,8 +18,12 @@ const ZegoTextureViewManager = Platform.select({
     android: requireNativeComponent('RCTZegoTextureView'), // * android.view.TextureView
 });
 
+export interface SurfaceViewProps extends ViewProps {
+    zOrderMediaOverlay?: boolean;
+    zOrderOnTop?: boolean;
+}
 
-export class ZegoSurfaceView extends Component<{}> {
+export class ZegoSurfaceView extends Component<{SurfaceViewProps}> {
 
     render() {
         return (

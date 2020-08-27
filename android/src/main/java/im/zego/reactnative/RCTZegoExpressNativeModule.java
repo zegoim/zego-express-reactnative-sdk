@@ -2,6 +2,7 @@ package im.zego.reactnative;
 
 import android.app.Application;
 import android.view.View;
+import android.view.TextureView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -161,8 +162,8 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createEngine(long appID, String appSign, boolean isTestEnv, int scenario, Promise promise) {
-        ZegoExpressEngine.createEngine(appID, appSign, isTestEnv, ZegoScenario.getZegoScenario(scenario), (Application) this.reactContext.getApplicationContext(), new IZegoEventHandler() {
+    public void createEngine(Integer appID, String appSign, boolean isTestEnv, int scenario, Promise promise) {
+        ZegoExpressEngine.createEngine(appID.longValue(), appSign, isTestEnv, ZegoScenario.getZegoScenario(scenario), (Application) this.reactContext.getApplicationContext(), new IZegoEventHandler() {
             @Override
             public void onDebugError(int errorCode, String funcName, String info) {
                 super.onDebugError(errorCode, funcName, info);
@@ -502,7 +503,14 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
             @Override
             public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
                 View nativeView = nativeViewHierarchyManager.resolveView(viewTag);
-                ZegoCanvas canvas = new ZegoCanvas(nativeView);
+                ZegoCanvas canvas = null;
+                if(nativeView instanceof ZegoSurfaceView) {
+                    ZegoSurfaceView sv = (ZegoSurfaceView)nativeView;
+                    canvas = new ZegoCanvas(sv.getView());
+                } else if(nativeView instanceof TextureView) {
+                    canvas = new ZegoCanvas(nativeView);
+                }
+                
                 canvas.viewMode = ZegoViewMode.getZegoViewMode(view.getInt("viewMode"));
                 canvas.backgroundColor = view.getInt("backgroundColor");
 
@@ -626,7 +634,13 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
             @Override
             public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
                 View nativeView = nativeViewHierarchyManager.resolveView(viewTag);
-                ZegoCanvas canvas = new ZegoCanvas(nativeView);
+                ZegoCanvas canvas = null;
+                if(nativeView instanceof ZegoSurfaceView) {
+                    ZegoSurfaceView sv = (ZegoSurfaceView)nativeView;
+                    canvas = new ZegoCanvas(sv.getView());
+                } else if(nativeView instanceof TextureView) {
+                    canvas = new ZegoCanvas(nativeView);
+                }
                 canvas.viewMode = ZegoViewMode.getZegoViewMode(view.getInt("viewMode"));
                 canvas.backgroundColor = view.getInt("backgroundColor");
 
@@ -873,7 +887,13 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
             @Override
             public void execute(NativeViewHierarchyManager nativeViewHierarchyManager) {
                 View nativeView = nativeViewHierarchyManager.resolveView(viewTag);
-                ZegoCanvas canvas = new ZegoCanvas(nativeView);
+                ZegoCanvas canvas = null;
+                if(nativeView instanceof ZegoSurfaceView) {
+                    ZegoSurfaceView sv = (ZegoSurfaceView)nativeView;
+                    canvas = new ZegoCanvas(sv.getView());
+                } else if(nativeView instanceof TextureView) {
+                    canvas = new ZegoCanvas(nativeView);
+                }
                 canvas.viewMode = ZegoViewMode.getZegoViewMode(view.getInt("viewMode"));
                 canvas.backgroundColor = view.getInt("backgroundColor");
 
