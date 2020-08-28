@@ -41,7 +41,7 @@
 
 + (void)log:(NSString *)content {
     // TODO: write log
-    NSLog(@"%@", content);
+    //NSLog(@"%@", content);
 }
 
 @end
