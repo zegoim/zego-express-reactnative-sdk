@@ -2,35 +2,35 @@
 
 [English](https://github.com/zegoim/zego-express-reactnative-sdk/blob/master/README.md) | [中文](https://github.com/zegoim/zego-express-reactnative-sdk/blob/master/README_zh.md)
 
-ZegoExpressEngine Audio/Video ReactNative SDK is a react-native wrapper based on [ZegoExpressEngine](https://doc-en.zego.im/en/693.html) native Android / iOS SDK, providing live video and real-time audio/video services. It only needs 4 lines of code and can be easily accessed in 30 minutes.
+即构科技 (ZEGO) 极速音视频 ReactNative SDK 是一个基于 [ZegoExpressEngine](https://doc-zh.zego.im/zh/693.html) 原生 Android / iOS SDK 的 ReactNative Wrapper，提供视频直播以及实时音视频服务。仅需4行代码，30分钟即可轻松接入。
 
-Learn more about the solution: [https://www.zego.im](https://www.zego.im)
+了解更多解决方案：[https://www.zego.im](https://www.zego.im)
 
-## 1️⃣ Apply for ZEGO AppID
+## 1️⃣ 申请 ZEGO AppID
 
-Log in to [ZEGO Official Website](https://www.zego.im) to register an account, select a scenario according to your actual business needs, and obtain AppID and App Sign for initializing the SDK.
+登录 [ZEGO 官网](https://www.zego.im) 注册账号，根据自身实际业务需求选择场景，获取 AppID 与 AppSign，用于初始化 SDK。
 
-## 2️⃣ Import `zego-express-engine-reactnative` (only support react-native >= 0.60)
+## 2️⃣ 导入 `zego-express-engine-reactnative` (仅支持 react-native >= 0.60)
 
-In your project, you can type in:
+进入工程根目录并输入：
 
 `npm install zego-express-engine-reactnative --save`
 
-or
+或者
 
 `yarn add zego-express-engine-reactnative`
 
-Next, In **iOS**, you should `cd` to `ios` folder, and execute this command:
+下一步，在运行 **iOS** 之前，你还需要 `cd` 到 `ios` 目录下，执行以下命令：
 
 `pod install`
 
-Now, you can use `zego-express-engine-reactnative` module in your project by using javascript or typescript(recommended)
+现在，你就可以在项目中使用 javascript 或者 typescript(我们推荐使用 typescript) 来集成  `zego-express-engine-reactnative` 了
 
-## 3️⃣ Add device permissions
+## 3️⃣ 添加设备权限
 
 ### Android
 
-Open the file `app/src/main/AndroidManifest.xml`, and add the following contents:
+打开 `app/src/main/AndroidManifest.xml` 文件，添加如下内容：
 
 ```xml
     <!-- Permissions required by the SDK -->
@@ -54,7 +54,7 @@ Open the file `app/src/main/AndroidManifest.xml`, and add the following contents
     <uses-feature android:name="android.hardware.camera.autofocus" />
 ```
 
-> Note: Because Android 6.0 requires dynamic permissions for some of the more important permissions, you cannot apply for static permissions only through the `AndroidMainfest.xml` file. Therefore, you need to refer to the following code
+> 请注意：因为 Android 6.0 在一些比较重要的权限上要求必须申请动态权限，不能只通过 `AndroidMainfest.xml` 文件申请静态权限。因此还需要参考执行如下代码
 
 ```javascript
 import {PermissionsAndroid} from 'react-native';
@@ -75,21 +75,21 @@ granted.then((data)=>{
 
 ### iOS
 
-Choose the option TARGETS -> Info -> Custom iOS Target Properties
+选择项目 TARGETS -> Info -> Custom iOS Target Properties
 
 ![Add iOS Privacy](https://storage.zego.im/sdk-doc/Pics/iOS/ZegoExpressEngine/Common/privacy-description.png)
 
-Click the + Add button to add camera and microphone permissions.
+点击 + 添加按钮，添加摄像头和麦克风权限。
 
 1. `Privacy - Camera Usage Description`
 
 2. `Privacy - Microphone Usage Description`
 
-After adding permissions, it will be as shown:
+添加权限完成后如图所示：
 
 ![Add iOS Privacy Done](https://storage.zego.im/sdk-doc/Pics/iOS/ZegoExpressEngine/Common/privacy-description-done.png)
 
-## 4️⃣ Init SDK
+## 4️⃣ 初始化 SDK
 
 ```javascript
 import React, { Component } from 'react';
@@ -110,12 +110,12 @@ export default class App extends Component<{}> {
 
 ## 5️⃣ FAQ
 
-### 1. Can I integrate SDK with versions below 0.60?
+### 1. 我能使用 0.60 以下的 react-native 版本集成 SDK 吗?
 
-No. `zego-express-engine-reactnative` only supports ReactNative versions of 0.60 or above, otherwise, please upgrade your project version.
+不行。`zego-express-engine-reactnative` 仅支持 0.60 或以上的 react-native 版本。若需使用，请升级你的项目版本。
 
-### Do I need a manual link this native module?
+### 导入 SDK 到工程后，我还需要手动链接 Native Module 吗?
 
-No. Automatic Link is supported in versions 0.60 or above, so you **don't need** to execute this command:
+不需要。react-native 从 0.60 版本开始，已支持自动链接 Native Module，因此你**无需**执行以下代码：
 
 `react-native link zego-express-engine-reactnative`
