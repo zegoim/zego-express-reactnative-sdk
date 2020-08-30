@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                   react-native-zego-express-engine
                    DESC
-  s.homepage     = "https://github.com/github_account/react-native-zego-express-engine"
+  s.homepage     = "https://github.com/zegoim/zego-express-reactnative-sdk"
   # brief license entry:
   s.license      = "MIT"
   # optional - use expanded license entry instead:
