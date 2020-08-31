@@ -284,9 +284,9 @@ export class ZegoExpressEngineImpl {
         if( index >= 0) {
             await ZegoExpressNativeModule.destroyMediaPlayer(index);
             ZegoExpressEngineImpl._mediaPlayerMap.delete(index);
-            mediaPlayer.off("MediaPlayerStateUpdate");
-            mediaPlayer.off("MediaPlayerNetworkEvent");
-            mediaPlayer.off("MediaPlayerPlayingProgress");
+            mediaPlayer.off("mediaPlayerStateUpdate");
+            mediaPlayer.off("mediaPlayerNetworkEvent");
+            mediaPlayer.off("mediaPlayerPlayingProgress");
         }
         return;
     }
