@@ -1,7 +1,7 @@
 {
   "name": "zego-express-engine-reactnative",
   "title": "Zego RN SDK",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "React Native Zego Express Video for Android & iOS",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
