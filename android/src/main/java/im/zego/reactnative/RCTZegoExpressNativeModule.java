@@ -173,7 +173,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onDebugError(errorCode, funcName, info);
 
                 WritableMap args = getCallbackArgs(errorCode, funcName, info);
-                sendEvent("DebugError", args);
+                sendEvent("debugError", args);
             }
 
             @Override
@@ -181,7 +181,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onRoomStateUpdate(roomID, state, errorCode, extendedData);
 
                 WritableMap args = getCallbackArgs(roomID, state.value(), errorCode, extendedData.toString());
-                sendEvent("RoomStateUpdate", args);
+                sendEvent("roomStateUpdate", args);
             }
 
             @Override
@@ -196,7 +196,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     userListArray.pushMap(userMap);
                 }
                 WritableMap args = getCallbackArgs(roomID, updateType.value(), userListArray);
-                sendEvent("RoomUserUpdate", args);
+                sendEvent("roomUserUpdate", args);
             }
 
             @Override
@@ -204,7 +204,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onRoomOnlineUserCountUpdate(roomID, count);
 
                 WritableMap args = getCallbackArgs(roomID, count);
-                sendEvent("RoomOnlineUserCountUpdate", args);
+                sendEvent("roomOnlineUserCountUpdate", args);
             }
 
             @Override
@@ -226,7 +226,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     streamListArray.pushMap(streamMap);
                 }
                 WritableMap args = getCallbackArgs(roomID, updateType.value(), streamListArray);
-                sendEvent("RoomStreamUpdate", args);
+                sendEvent("roomStreamUpdate", args);
             }
 
             @Override
@@ -234,7 +234,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPublisherStateUpdate(streamID, state, errorCode, extendedData);
 
                 WritableMap args = getCallbackArgs(streamID, state.value(), errorCode, extendedData.toString());
-                sendEvent("PublisherStateUpdate", args);
+                sendEvent("publisherStateUpdate", args);
             }
 
             @Override
@@ -258,7 +258,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 qualityMap.putDouble("videoSendBytes", quality.videoSendBytes);
 
                 WritableMap args = getCallbackArgs(streamID, qualityMap);
-                sendEvent("PublisherQualityUpdate", args);
+                sendEvent("publisherQualityUpdate", args);
             }
 
             @Override
@@ -266,7 +266,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPublisherCapturedAudioFirstFrame();
 
                 WritableMap args = getCallbackArgs();
-                sendEvent("PublisherCapturedAudioFirstFrame", args);
+                sendEvent("publisherCapturedAudioFirstFrame", args);
             }
 
             @Override
@@ -274,7 +274,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPublisherCapturedVideoFirstFrame(channel);
 
                 WritableMap args = getCallbackArgs(channel.value());
-                sendEvent("PublisherCapturedVideoFirstFrame", args);
+                sendEvent("publisherCapturedVideoFirstFrame", args);
             }
 
             @Override
@@ -282,7 +282,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPublisherVideoSizeChanged(width, height, channel);
 
                 WritableMap args = getCallbackArgs(width, height, channel.value());
-                sendEvent("PublisherVideoSizeChanged", args);
+                sendEvent("publisherVideoSizeChanged", args);
             }
 
             @Override
@@ -290,7 +290,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerStateUpdate(streamID, state, errorCode, extendedData);
 
                 WritableMap args = getCallbackArgs(streamID, state.value(), errorCode, extendedData.toString());
-                sendEvent("PlayerStateUpdate", args);
+                sendEvent("playerStateUpdate", args);
             }
 
             @Override
@@ -318,7 +318,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 qualityMap.putDouble("videoRecvBytes", quality.videoRecvBytes);
 
                 WritableMap args = getCallbackArgs(streamID, qualityMap);
-                sendEvent("PlayerQualityUpdate", args);
+                sendEvent("playerQualityUpdate", args);
             }
 
             @Override
@@ -326,7 +326,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerMediaEvent(streamID, event);
 
                 WritableMap args = getCallbackArgs(streamID, event);
-                sendEvent("PlayerMediaEvent", args);
+                sendEvent("playerMediaEvent", args);
             }
 
             @Override
@@ -334,7 +334,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerRecvAudioFirstFrame(streamID);
 
                 WritableMap args = getCallbackArgs(streamID);
-                sendEvent("PlayerRecvAudioFirstFrame", args);
+                sendEvent("playerRecvAudioFirstFrame", args);
             }
 
             @Override
@@ -342,7 +342,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerRecvVideoFirstFrame(streamID);
 
                 WritableMap args = getCallbackArgs(streamID);
-                sendEvent("PlayerRecvVideoFirstFrame", args);
+                sendEvent("playerRecvVideoFirstFrame", args);
             }
 
             @Override
@@ -350,7 +350,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerRenderVideoFirstFrame(streamID);
 
                 WritableMap args = getCallbackArgs(streamID);
-                sendEvent("PlayerRenderVideoFirstFrame", args);
+                sendEvent("playerRenderVideoFirstFrame", args);
             }
 
             @Override
@@ -358,7 +358,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onPlayerVideoSizeChanged(streamID, width, height);
 
                 WritableMap args = getCallbackArgs(streamID, width, height);
-                sendEvent("PlayerVideoSizeChanged", args);
+                sendEvent("playerVideoSizeChanged", args);
             }
 
             @Override
@@ -366,7 +366,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onCapturedSoundLevelUpdate(soundLevel);
 
                 WritableMap args = getCallbackArgs(soundLevel);
-                sendEvent("CapturedSoundLevelUpdate", args);
+                sendEvent("capturedSoundLevelUpdate", args);
             }
 
             @Override
@@ -378,7 +378,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     soundLevelsMap.putDouble(entry.getKey(), entry.getValue());
                 }
                 WritableMap args = getCallbackArgs(soundLevelsMap);
-                sendEvent("RemoteSoundLevelUpdate", args);
+                sendEvent("remoteSoundLevelUpdate", args);
             }
 
             @Override
@@ -386,7 +386,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onDeviceError(errorCode, deviceName);
 
                 WritableMap args = getCallbackArgs(errorCode, deviceName);
-                sendEvent("DeviceError", args);
+                sendEvent("deviceError", args);
             }
 
             @Override
@@ -394,7 +394,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onRemoteCameraStateUpdate(streamID, state);
 
                 WritableMap args = getCallbackArgs(streamID, state.value());
-                sendEvent("RemoteCameraStateUpdate", args);
+                sendEvent("remoteCameraStateUpdate", args);
             }
 
             @Override
@@ -402,7 +402,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                 super.onRemoteMicStateUpdate(streamID, state);
 
                 WritableMap args = getCallbackArgs(streamID, state.value());
-                sendEvent("RemoteMicStateUpdate", args);
+                sendEvent("remoteMicStateUpdate", args);
             }
         });
         mIsInited = true;
@@ -842,7 +842,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     super.onMediaPlayerStateUpdate(mediaPlayer, state, errorCode);
 
                     WritableMap args = getMediaPlayerCallbackArgs(mediaPlayer.getIndex(), state.value(), errorCode);
-                    sendEvent("MediaPlayerStateUpdate", args);
+                    sendEvent("mediaPlayerStateUpdate", args);
                 }
 
                 @Override
@@ -850,7 +850,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     super.onMediaPlayerNetworkEvent(mediaPlayer, networkEvent);
 
                     WritableMap args = getMediaPlayerCallbackArgs(mediaPlayer.getIndex(), networkEvent.value());
-                    sendEvent("MediaPlayerNetworkEvent", args);
+                    sendEvent("mediaPlayerNetworkEvent", args);
                 }
 
                 @Override
@@ -858,7 +858,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
                     super.onMediaPlayerPlayingProgress(mediaPlayer, millisecond);
 
                     WritableMap args = getMediaPlayerCallbackArgs(mediaPlayer.getIndex(), millisecond);
-                    sendEvent("MediaPlayerPlayingProgress", args);
+                    sendEvent("mediaPlayerPlayingProgress", args);
                 }
             });
             this.mediaPlayerMap.put(index, mediaPlayer);
