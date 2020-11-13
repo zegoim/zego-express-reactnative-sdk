@@ -1,0 +1,5 @@
+.idea
+android/.idea
+android/.gradle
+android/.project
+android/local.properties
