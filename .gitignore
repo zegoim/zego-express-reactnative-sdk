@@ -2,4 +2,5 @@
 android/.idea
 android/.gradle
 android/.project
+android/.settings
 android/local.properties
