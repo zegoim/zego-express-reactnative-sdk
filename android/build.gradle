@@ -73,6 +73,6 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
-    implementation 'im.zego:express-video:1.14.0'
+    implementation 'im.zego:express-video:1.19.0'
 }
 

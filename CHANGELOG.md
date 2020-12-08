@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.9.3
+
+- fix: android createEngine appID exceeds 32 bit error.
+- update native sdk(1.19.0)
+
 ## 0.9.2
 
 - fix: fix callback name from upper to lower.
