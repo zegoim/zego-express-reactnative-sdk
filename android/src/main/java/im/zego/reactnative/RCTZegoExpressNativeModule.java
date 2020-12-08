@@ -166,7 +166,7 @@ public class RCTZegoExpressNativeModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void createEngine(Integer appID, String appSign, boolean isTestEnv, int scenario, Promise promise) {
+    public void createEngine(Double appID, String appSign, boolean isTestEnv, int scenario, Promise promise) {
         ZegoExpressEngine.createEngine(appID.longValue(), appSign, isTestEnv, ZegoScenario.getZegoScenario(scenario), (Application) this.reactContext.getApplicationContext(), new IZegoEventHandler() {
             @Override
             public void onDebugError(int errorCode, String funcName, String info) {
