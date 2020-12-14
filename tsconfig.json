@@ -72,5 +72,10 @@
   ],
   "include": [
      "./src"
-  ]
+  ],
+  "typedocOptions": {
+    "ignoreCompilerErrors": true,
+    "mode": "modules",
+    "out": "./docs"
+  }
 }

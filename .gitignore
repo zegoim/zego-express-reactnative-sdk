@@ -4,3 +4,8 @@ android/.gradle
 android/.project
 android/.settings
 android/local.properties
+android/gradlew
+android/gradlew.bat
+android/gradle/wrapper/gradle-wrapper.properties
+android/gradle/wrapper/gradle-wrapper.jar
+docs/*
